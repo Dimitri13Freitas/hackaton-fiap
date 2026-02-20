@@ -1,0 +1,24 @@
+{
+  "name": "hackaton-fiap",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev serve --filter=mfe-login --filter=web-shell --parallel",
+    "lint": "turbo run lint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.29.3",
+  "devDependencies": {
+    "@types/react": "^19.2.13",
+    "@types/react-dom": "^19.2.3",
+    "turbo": "^2.7.5"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
+    "tailwindcss-animate": "^1.0.7"
+  }
+}
