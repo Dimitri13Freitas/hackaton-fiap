@@ -11,6 +11,7 @@ export default defineConfig({
       filename: "remoteEntry.js",
       exposes: {
         "./Login": "./src/components/Login",
+        "./Register": "./src/components/Register",
       },
       shared: ["react", "react-dom"],
     }),

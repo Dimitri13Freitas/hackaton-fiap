@@ -1,4 +1,5 @@
-import { ITarefaRepository, Tarefa } from "@repo/domain";
+import { ITarefaRepository } from "@repo/application";
+import { Tarefa } from "@repo/domain";
 
 export class TarefaRepository implements ITarefaRepository {
   salvar(tarefa: Tarefa): any {

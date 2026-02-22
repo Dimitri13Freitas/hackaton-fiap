@@ -11,17 +11,20 @@ import {
 import { Label } from "@repo/ui/src/components/ui/label";
 import React from "react";
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
   return (
     <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
       <MindEaseLogo />
+
       <div className="flex w-full max-w-sm flex-col gap-6">
         <div className={"flex flex-col gap-6"}>
           <Card>
             <CardHeader className="text-center">
-              <CardTitle className="text-xl">Bem-vindo de volta!</CardTitle>
+              <CardTitle className="text-xl">
+                Seja bem-vindo a plataforma
+              </CardTitle>
               <CardDescription>
-                Faça seu login para ter acesso a plataforma
+                Cadastre sua conta para ter acesso a plataforma
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -104,4 +107,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default Register;

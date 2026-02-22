@@ -7,7 +7,7 @@ export const MindEaseLogo = () => {
     <div>
       <div className="flex items-center gap-2">
         <Brain size={32} />
-        <MindEaseText variant="h1" className="font-semibold text-xl">
+        <MindEaseText variant="h1" className="font-semibold text-2xl">
           MindEase
         </MindEaseText>
       </div>

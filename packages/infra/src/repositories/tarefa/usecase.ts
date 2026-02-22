@@ -1,5 +1,5 @@
 import { TarefaRepository } from "./TarefaRepository";
-import { CriarTarefa } from "@repo/domain";
+import { CriarTarefa } from "@repo/application";
 
 const tarefaRepository = new TarefaRepository();
 
