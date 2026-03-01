@@ -1,4 +1,4 @@
-import { IAuthRepository } from "../../ports";
+import { type IAuthRepository } from "../../ports";
 
 export class SignOutUseCase {
   constructor(private authRepository: IAuthRepository) {}

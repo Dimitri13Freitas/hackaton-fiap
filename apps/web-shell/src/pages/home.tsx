@@ -14,12 +14,7 @@ export const Home = () => {
               <Button variant="ghost">Entrar</Button>
             </Link>
             <Link to="/register">
-              <Button
-                onClick={() => console.log("botão do mfe")}
-                variant="default"
-              >
-                Começar agora
-              </Button>
+              <Button variant="default">Começar agora</Button>
             </Link>
           </div>
         </div>

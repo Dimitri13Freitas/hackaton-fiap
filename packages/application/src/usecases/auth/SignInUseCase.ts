@@ -1,4 +1,5 @@
-import { IAuthRepository } from "../../ports";
+import type { User } from "@repo/domain";
+import { type IAuthRepository } from "../../ports";
 
 export interface SignInRequest {
   email: string;
@@ -8,7 +9,7 @@ export interface SignInRequest {
 export class SignInUseCase {
   constructor(private authRepository: IAuthRepository) {}
 
-  async execute(request: SignInRequest): Promise<void> {
+  async execute(request: SignInRequest): Promise<User> {
     const { email, password } = request;
 
     if (!email || email.trim().length === 0) {
@@ -24,6 +25,6 @@ export class SignInUseCase {
       throw new Error("Email inválido");
     }
 
-    await this.authRepository.signIn(email.trim(), password);
+    return await this.authRepository.signIn(email.trim(), password);
   }
 }

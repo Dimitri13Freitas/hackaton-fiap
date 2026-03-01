@@ -11,7 +11,16 @@ export default defineConfig({
       remotes: {
         mfe_login: "http://localhost:5001/assets/remoteEntry.js",
       },
-      shared: ["react", "react-dom"],
+      // shared: ["react", "react-dom"],
+      shared: {
+        react: { singleton: true, requiredVersion: false },
+        "react-dom": { singleton: true, requiredVersion: false },
+        "@repo/ui": { singleton: true, eager: true },
+        "@repo/stores": {
+          singleton: true,
+          eager: true,
+        },
+      },
     }),
   ],
   resolve: {

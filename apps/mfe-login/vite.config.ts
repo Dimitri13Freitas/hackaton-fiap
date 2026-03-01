@@ -13,7 +13,15 @@ export default defineConfig({
         "./Login": "./src/components/Login",
         "./Register": "./src/components/Register",
       },
-      shared: ["react", "react-dom"],
+      shared: {
+        react: { singleton: true, requiredVersion: false },
+        "react-dom": { singleton: true, requiredVersion: false },
+        "@repo/ui": { singleton: true, eager: true },
+        "@repo/stores": {
+          singleton: true,
+          eager: true,
+        },
+      },
     }),
   ],
   resolve: {

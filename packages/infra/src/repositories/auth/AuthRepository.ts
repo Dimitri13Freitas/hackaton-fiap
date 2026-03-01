@@ -9,7 +9,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../../firebase/firebase-config";
-import { IAuthRepository } from "@repo/application";
+import { type IAuthRepository } from "@repo/application";
 
 export class AuthRepository implements IAuthRepository {
   private currentUser: DomainUser | null = null;

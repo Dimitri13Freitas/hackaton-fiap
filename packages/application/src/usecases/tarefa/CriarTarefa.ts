@@ -1,5 +1,5 @@
 import { Tarefa } from "@repo/domain";
-import { ITarefaRepository } from "../../ports/ITarefaRepository";
+import { type ITarefaRepository } from "../../ports/ITarefaRepository";
 
 export class CriarTarefa {
   constructor(private repo: ITarefaRepository) {}
