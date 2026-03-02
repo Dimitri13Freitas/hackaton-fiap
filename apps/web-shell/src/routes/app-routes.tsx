@@ -1,8 +1,9 @@
 import { useAuthStore } from "@repo/stores";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { Home } from "../pages/home";
 import { lazy, useEffect } from "react";
-import { Button } from "@repo/ui";
+import { Button, TooltipProvider } from "@repo/ui";
+import { Interface } from "../pages/interface";
 
 const RemoteMFELogin = lazy(() => import("mfe_login/Login"));
 const RemoteMFERegister = lazy(() => import("mfe_login/Register"));
@@ -13,51 +14,38 @@ export function AppRoutes() {
 
   useEffect(() => {
     if (isAuthenticated) navigate("/");
-    console.log("Auth approutesShell:", isAuthenticated);
   }, [isAuthenticated]);
 
-  // if (isLoading) return <h1>Loading....</h1>;
-
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          !isAuthenticated ? (
-            <Home />
-          ) : (
-            <>
-              <h1 className="bg-red-500">Interface logada</h1>
-              <Button onClick={async () => logout()}> deslogar</Button>
-            </>
-          )
-        }
-      />
+    <TooltipProvider>
+      <Routes>
+        <Route path="/" element={!isAuthenticated ? <Home /> : <Interface />} />
 
-      <Route
-        path="/login"
-        element={
-          !isAuthenticated ? (
-            <RemoteMFELogin />
-          ) : (
-            <h1 className="bg-red-500">Interface logada</h1>
-          )
-        }
-      />
-
-      <Route
-        path="/register"
-        element={
-          !isAuthenticated ? (
-            <RemoteMFERegister />
-          ) : (
-            <>
+        <Route
+          path="/login"
+          element={
+            !isAuthenticated ? (
+              <RemoteMFELogin />
+            ) : (
               <h1 className="bg-red-500">Interface logada</h1>
-              <Button onClick={async () => logout()}> deslogar</Button>
-            </>
-          )
-        }
-      />
-    </Routes>
+            )
+          }
+        />
+
+        <Route
+          path="/register"
+          element={
+            !isAuthenticated ? (
+              <RemoteMFERegister />
+            ) : (
+              <>
+                <h1 className="bg-red-500">Interface logada</h1>
+                <Button onClick={async () => logout()}> deslogar</Button>
+              </>
+            )
+          }
+        />
+      </Routes>
+    </TooltipProvider>
   );
 }
