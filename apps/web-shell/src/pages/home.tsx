@@ -6,8 +6,8 @@ import { Link } from "react-router-dom";
 export const Home = () => {
   return (
     <>
-      <div className="max-w-5xl m-auto p-4 bg-background">
-        <div className="flex justify-between mt-10">
+      <div className="max-w-5xl m-auto p-4">
+        <div className="flex justify-between mt-8">
           <MindEaseLogo />
           <div className="flex gap-4 items-center">
             <Link to="/login">
@@ -18,10 +18,6 @@ export const Home = () => {
             </Link>
           </div>
         </div>
-
-        {/* <Suspense fallback={<LoadingSpinner />}>
-          <RemoteMFELogin />
-        </Suspense> */}
         <div className="flex mt-16 justify-between items-center">
           <main className="max-w-[480px] ">
             <MindEaseText
@@ -60,7 +56,7 @@ export const Home = () => {
           </aside>
         </div>
       </div>
-      <footer className="w-full py-4 absolute bottom-0 bg-gray-100">
+      <footer className="w-full py-4 absolute bottom-0">
         <MindEaseText
           variant="sm"
           className="text-center text-muted-foreground"
