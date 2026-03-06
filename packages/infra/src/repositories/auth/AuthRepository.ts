@@ -8,7 +8,8 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
-import { auth } from "../../firebase/firebase-config";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "../../firebase/firebase-config";
 import { type IAuthRepository } from "@repo/application";
 
 export class AuthRepository implements IAuthRepository {
@@ -56,17 +57,34 @@ export class AuthRepository implements IAuthRepository {
       const firebaseUser = userCredential.user;
       await updateProfile(firebaseUser, { displayName: name });
 
-      // return userCredential.user;
+      if (firebaseUser.email) {
+        const userRef = doc(db, "users", firebaseUser.uid);
 
-      // if (firebaseUser.email) {
-      //   const userRef = doc(db, "users", firebaseUser.uid);
+        await setDoc(userRef, {
+          profile: {
+            name,
+            email: firebaseUser.email,
+            createdAt: new Date().toISOString(),
+          },
 
-      //   await setDoc(userRef, {
-      //     email: email,
-      //     totalBalance: 0,
-      //     createdAt: new Date(),
-      //   });
-      // }
+          accessibilitySettings: {
+            animations: false,
+            focusMode: false,
+            theme: "light",
+            highContrast: false,
+
+            pomodoro: {
+              focusMinutes: 25,
+              breakMinutes: 5,
+            },
+
+            spacing: "medium",
+            fontSize: "medium",
+
+            version: 1,
+          },
+        });
+      }
 
       const domainUser = this.mapFirebaseUserToDomain(firebaseUser);
       this.currentUser = domainUser;
