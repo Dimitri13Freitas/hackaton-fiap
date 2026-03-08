@@ -1,10 +1,8 @@
 import { type LucideIcon } from "lucide-react";
-
+import { Link } from "react-router-dom";
 import {
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "../components/ui/sidebar";
@@ -27,10 +25,10 @@ export function NavProjects({
               asChild
               className="hover:bg-primary/20! transition-colors"
             >
-              <a href={item.url}>
+              <Link to={item.url}>
                 <item.icon />
                 <span>{item.name}</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}

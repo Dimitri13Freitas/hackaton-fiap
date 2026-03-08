@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Play, Pause, RotateCcw } from "lucide-react";
 import { Button, cn, toast } from "@repo/ui";
 

@@ -7,10 +7,10 @@ export default defineConfig({
   plugins: [
     react(),
     federation({
-      name: "web_shell",
-      remotes: {
-        mfe_login: "http://localhost:5001/assets/remoteEntry.js",
-        mfe_settings: "http://localhost:5002/assets/remoteEntry.js",
+      name: "mfe_settings",
+      filename: "remoteEntry.js",
+      exposes: {
+        "./Settings": "./src/components/Settings",
       },
       shared: {
         react: { singleton: true, requiredVersion: false },
@@ -33,14 +33,15 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  server: {
-    port: 5000,
-    strictPort: true,
-  },
   build: {
     modulePreload: false,
     target: "esnext",
     minify: false,
     cssCodeSplit: false,
+  },
+  preview: {
+    port: 5002,
+    strictPort: true,
+    cors: true,
   },
 });

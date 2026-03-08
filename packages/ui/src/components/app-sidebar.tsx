@@ -18,17 +18,17 @@ const data = {
   projects: [
     {
       name: "Kanban",
-      url: "#",
+      url: "./",
       icon: SquareKanban,
     },
     {
       name: "Configurações",
-      url: "#",
+      url: "/settings",
       icon: Settings,
     },
     {
       name: "Perfil",
-      url: "#",
+      url: "/profile",
       icon: User,
     },
   ],

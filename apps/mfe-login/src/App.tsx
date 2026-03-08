@@ -6,7 +6,7 @@ function App() {
 
   return (
     <>
-      <h1 className="bg-red-400">Este aqui é o MFE Login Remote</h1>
+      <p className="bg-red-400 text-center">MFE Login Remote</p>
       <Login />
     </>
   );

@@ -1,1 +1,2 @@
-export * from './GetPreferences';
+export * from "./GetPreferences";
+export * from "./SavePreferences";

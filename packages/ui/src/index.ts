@@ -16,6 +16,7 @@ export * from "./components/ui/sheet";
 export * from "./components/ui/separator";
 export * from "./components/ui/dropdown-menu";
 export * from "./components/ui/collapsible";
+export * from "./preferences/PreferencesProvider";
 
 export { LoaderCircle } from "lucide-react";
 

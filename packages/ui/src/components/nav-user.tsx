@@ -1,6 +1,5 @@
-"use client";
-import { EllipsisVertical, LogOut, Moon, User } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
+import { EllipsisVertical, Focus, LogOut, Moon, User } from "lucide-react";
+import { Avatar, AvatarFallback } from "../components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,11 +14,24 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "../components/ui/sidebar";
-import { useAuthStore } from "@repo/stores";
+import { useAuthStore, usePreferencesStore } from "@repo/stores";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { logout, user } = useAuthStore();
+
+  const theme = usePreferencesStore((s) => s.settings?.theme);
+  const update = usePreferencesStore((s) => s.update);
+
+  function toggle() {
+    if (!user) return;
+    update(
+      {
+        theme: theme === "dark" ? "light" : "dark",
+      },
+      user?.uid,
+    );
+  }
 
   if (user)
     return (
@@ -52,9 +64,19 @@ export function NavUser() {
               sideOffset={4}
             >
               <DropdownMenuGroup>
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => toggle()}
+                >
                   <Moon />
-                  Tema escuro
+                  {theme === "dark" ? "Tema claro" : "Tema escuro"}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => console.log("ativa modo foco")}
+                >
+                  <Focus />
+                  Ativar modo foco
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
