@@ -7,4 +7,5 @@ export interface IAuthRepository {
   sendPasswordResetEmail(email: string): Promise<void>;
   onAuthStateChanged(callback: (user: User | null) => void): () => void;
   getCurrentUser(): User | null;
+  updateProfile(name: string): Promise<User>;
 }

@@ -1,7 +1,11 @@
 import { create } from "zustand";
 import { User } from "@repo/domain";
-import { signOutUseCase, signInUseCase, signUpUseCase } from "@repo/infra";
-
+import {
+  signOutUseCase,
+  signInUseCase,
+  signUpUseCase,
+  updateProfileUseCase,
+} from "@repo/infra";
 export interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
@@ -18,6 +22,7 @@ export interface AuthActions {
     email: string;
     password: string;
   }) => Promise<void>;
+  updateProfile: (name: string) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState & AuthActions>((set) => ({
@@ -67,5 +72,16 @@ export const useAuthStore = create<AuthState & AuthActions>((set) => ({
   logout: async () => {
     await signOutUseCase.execute();
     set({ user: null, isAuthenticated: false });
+  },
+
+  updateProfile: async (name: string) => {
+    set({ isLoading: true });
+    try {
+      const updatedUser = await updateProfileUseCase.execute(name);
+      set({ user: updatedUser, isLoading: false });
+    } catch (error) {
+      set({ isLoading: false });
+      throw error;
+    }
   },
 }));

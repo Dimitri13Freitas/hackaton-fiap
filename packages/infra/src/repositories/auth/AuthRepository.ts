@@ -141,6 +141,26 @@ export class AuthRepository implements IAuthRepository {
     return this.currentUser;
   }
 
+  async updateProfile(name: string): Promise<DomainUser> {
+    try {
+      const firebaseUser = auth.currentUser;
+      if (!firebaseUser) throw new Error("Usuário não autenticado");
+
+      await updateProfile(firebaseUser, { displayName: name });
+      
+      const domainUser = this.mapFirebaseUserToDomain(firebaseUser);
+      this.currentUser = domainUser;
+
+      // Update in firestore as well
+      const userRef = doc(db, "users", firebaseUser.uid);
+      await setDoc(userRef, { profile: { name } }, { merge: true });
+
+      return domainUser;
+    } catch (error) {
+      throw new Error("Erro ao atualizar o perfil. Tente novamente.");
+    }
+  }
+
   private mapFirebaseUserToDomain(firebaseUser: FirebaseUser): DomainUser {
     return DomainUser.create(
       firebaseUser.uid,
