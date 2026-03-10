@@ -1,8 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { Button, Separator, Plus } from "@repo/ui";
+import {
+  Button,
+  Separator,
+  Plus,
+  MindEaseText,
+  Input,
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  MoreVertical,
+  Trash,
+  Pencil,
+} from "@repo/ui";
 import { TipsSlide } from "./tips-slide";
-import { usePreferencesStore } from "@repo/stores";
+import { usePreferencesStore, useAuthStore } from "@repo/stores";
+import {
+  createTaskUseCase,
+  deleteTaskUseCase,
+  getTasksUseCase,
+  updateTaskUseCase,
+} from "@repo/infra";
 
 const initialData = {
   tasks: {
@@ -19,31 +38,119 @@ const initialData = {
 
 export default function KanbanBoard() {
   const focusMode = usePreferencesStore((s) => s.settings?.focusMode);
+  const { user } = useAuthStore();
   const [data, setData] = useState(initialData);
   const [newTaskContent, setNewTaskContent] = useState("");
   const [activeColumnId, setActiveColumnId] = useState(null);
+  const [editingTaskId, setEditingTaskId] = useState(null);
+  const [editingText, setEditingText] = useState("");
+  const [tasks, setTasks] = useState<any>([]);
 
-  const handleAddTask = (e, columnId) => {
+  useEffect(() => {
+    async function loadTasks() {
+      if (!user?.uid) return null;
+      const result = await getTasksUseCase.execute(user?.uid);
+      console.log(result);
+      setTasks(result);
+    }
+
+    loadTasks();
+  }, []);
+
+  // const handleAddTask = (e: any, columnId: any) => {
+  //   e.preventDefault();
+  //   if (!newTaskContent.trim()) return;
+
+  //   const newTaskId = `task-${Date.now()}`;
+  //   const newTask = { id: newTaskId, content: newTaskContent };
+
+  //   const column = data.columns[columnId];
+  //   const newColumn = {
+  //     ...column,
+  //     taskIds: [newTaskId, ...column.taskIds],
+  //   };
+
+  //   setData({
+  //     ...data,
+  //     tasks: { ...data.tasks, [newTaskId]: newTask },
+  //     columns: { ...data.columns, [columnId]: newColumn },
+  //   });
+
+  //   setNewTaskContent("");
+  //   setActiveColumnId(null);
+  // };
+
+  const handleAddTask = async (e, columnId) => {
     e.preventDefault();
-    if (!newTaskContent.trim()) return;
+    if (!user?.uid) return null;
 
-    const newTaskId = `task-${Date.now()}`;
-    const newTask = { id: newTaskId, content: newTaskContent };
+    // const task = new Task(
+    //   crypto.randomUUID(),
+    //   newTaskContent,
+    //   columnId,
+    //   Date.now(),
+    // );
 
-    const column = data.columns[columnId];
-    const newColumn = {
-      ...column,
-      taskIds: [newTaskId, ...column.taskIds],
-    };
-
-    setData({
-      ...data,
-      tasks: { ...data.tasks, [newTaskId]: newTask },
-      columns: { ...data.columns, [columnId]: newColumn },
-    });
+    await createTaskUseCase.execute(user?.uid, task);
 
     setNewTaskContent("");
-    setActiveColumnId(null);
+  };
+
+  // const deleteTask = (taskId, columnId) => {
+  //   const column = data.columns[columnId];
+
+  //   const newTaskIds = column.taskIds.filter((id) => id !== taskId);
+
+  //   const newColumn = {
+  //     ...column,
+  //     taskIds: newTaskIds,
+  //   };
+
+  //   const newTasks = { ...data.tasks };
+  //   delete newTasks[taskId];
+
+  //   setData({
+  //     ...data,
+  //     tasks: newTasks,
+  //     columns: {
+  //       ...data.columns,
+  //       [columnId]: newColumn,
+  //     },
+  //   });
+  // };
+
+  // const editTask = (taskId, newContent) => {
+  //   setData({
+  //     ...data,
+  //     tasks: {
+  //       ...data.tasks,
+  //       [taskId]: {
+  //         ...data.tasks[taskId],
+  //         content: newContent,
+  //       },
+  //     },
+  //   });
+  // };
+
+  const handleDeleteTask = async (taskId) => {
+    if (!user?.uid) return null;
+
+    await deleteTaskUseCase.execute(user.uid, taskId);
+  };
+
+  const editTask = async (taskId, newContent) => {
+    if (!user?.uid) return null;
+
+    const task = tasks.find((t) => t.id === taskId);
+
+    // const updated = new Task(
+    //   task.id,
+    //   newContent,
+    //   task.columnId,
+    //   task.createdAt
+    // );
+
+    await updateTaskUseCase.execute(user?.uid, updated);
   };
 
   const onDragEnd = (result) => {
@@ -96,9 +203,12 @@ export default function KanbanBoard() {
                 className="flex flex-1 min-w-[280px] flex-col  rounded-xl border  bg-muted/20 p-4"
               >
                 <div className="flex items-center justify-between mb-2 ">
-                  <h3 className="font-bold text-sm uppercase tracking-tight">
+                  <MindEaseText
+                    variant="sm"
+                    className="font-bold uppercase tracking-tight"
+                  >
                     {column.title}
-                  </h3>
+                  </MindEaseText>
                   <Button
                     variant="ghost"
                     size="default"
@@ -120,7 +230,7 @@ export default function KanbanBoard() {
                     onSubmit={(e) => handleAddTask(e, column.id)}
                     className="mb-4 mt-3 space-y-2"
                   >
-                    <input
+                    <Input
                       autoFocus
                       className="w-full p-2 text-sm border rounded-lg bg-background focus:ring-2 ring-primary/20 outline-none"
                       placeholder="O que precisa ser feito?"
@@ -135,13 +245,13 @@ export default function KanbanBoard() {
                       >
                         Salvar
                       </Button>
-                      <button
+                      <Button
                         type="button"
+                        variant="ghost"
                         onClick={() => setActiveColumnId(null)}
-                        className="text-xs hover:underline"
                       >
                         Cancelar
-                      </button>
+                      </Button>
                     </div>
                   </form>
                 )}
@@ -151,7 +261,11 @@ export default function KanbanBoard() {
                     <div
                       {...provided.droppableProps}
                       ref={provided.innerRef}
-                      className={`flex flex-1 mt-3 flex-col gap-2 min-h-[150px] transition-colors ${snapshot.isDraggingOver ? "bg-primary/20 rounded-md" : ""}`}
+                      className={`flex flex-1 mt-3 flex-col gap-2 min-h-[150px] transition-colors ${
+                        snapshot.isDraggingOver
+                          ? "bg-primary/20 rounded-md"
+                          : ""
+                      }`}
                     >
                       {tasks.map((task, index) => (
                         <Draggable
@@ -163,14 +277,70 @@ export default function KanbanBoard() {
                             <div
                               ref={provided.innerRef}
                               {...provided.draggableProps}
-                              {...provided.dragHandleProps}
                               className={`rounded-lg border bg-background p-3 text-sm shadow-sm hover:border-primary/50 transition-all ${
                                 snapshot.isDragging
                                   ? "shadow-xl scale-[1.02] border-primary ring-2 ring-primary/10"
                                   : ""
                               }`}
                             >
-                              {task.content}
+                              <div className="flex items-start justify-between gap-2">
+                                {editingTaskId === task.id ? (
+                                  <Input
+                                    autoFocus
+                                    value={editingText}
+                                    onChange={(e) =>
+                                      setEditingText(e.target.value)
+                                    }
+                                    onBlur={() => {
+                                      editTask(task.id, editingText);
+                                      setEditingTaskId(null);
+                                    }}
+                                    onKeyDown={(e) => {
+                                      if (e.key === "Enter") {
+                                        editTask(task.id, editingText);
+                                        setEditingTaskId(null);
+                                      }
+                                    }}
+                                  />
+                                ) : (
+                                  <span
+                                    {...provided.dragHandleProps}
+                                    className="flex-1 cursor-grab"
+                                  >
+                                    {task.content}
+                                  </span>
+                                )}
+
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <button className="p-1 rounded hover:bg-muted">
+                                      <MoreVertical size={16} />
+                                    </button>
+                                  </DropdownMenuTrigger>
+
+                                  <DropdownMenuContent align="end">
+                                    <DropdownMenuItem
+                                      onClick={() => {
+                                        setEditingTaskId(task.id);
+                                        setEditingText(task.content);
+                                      }}
+                                    >
+                                      <Pencil size={14} className="mr-2" />
+                                      Editar
+                                    </DropdownMenuItem>
+
+                                    <DropdownMenuItem
+                                      className="text-red-500"
+                                      onClick={() =>
+                                        deleteTask(task.id, column.id)
+                                      }
+                                    >
+                                      <Trash size={14} className="mr-2" />
+                                      Excluir
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              </div>
                             </div>
                           )}
                         </Draggable>
@@ -185,24 +355,6 @@ export default function KanbanBoard() {
         </div>
       </DragDropContext>
       {!focusMode && <TipsSlide />}
-
-      {/* <aside className="w-full lg:w-64 shrink-0">
-        <div className="rounded-xl border bg-card p-5 shadow-sm sticky top-0">
-          <h3 className="mb-3 font-bold text-sm text-primary">
-            Dicas de produtividade
-          </h3>
-          <div className="space-y-4">
-            <p className="text-xs text-muted-foreground leading-relaxed italic border-l-2 border-primary/30 pl-3">
-              "A técnica Pomodoro ajuda a manter o foco alto e evita o burnout
-              mental."
-            </p>
-            <div className="h-px bg-border w-full" />
-            <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold">
-              Próxima dica em 05:00
-            </p>
-          </div>
-        </div>
-      </aside> */}
     </div>
   );
 }

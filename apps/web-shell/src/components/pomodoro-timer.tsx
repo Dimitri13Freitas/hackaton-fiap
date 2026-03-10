@@ -1,5 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
-import { Button, cn, toast, Play, Pause, RotateCcw } from "@repo/ui";
+import {
+  Button,
+  cn,
+  toast,
+  Play,
+  Pause,
+  RotateCcw,
+  MindEaseText,
+} from "@repo/ui";
 import { usePreferencesStore } from "@repo/stores";
 
 export function PomodoroTimer() {
@@ -55,13 +63,16 @@ export function PomodoroTimer() {
 
   return (
     <div className="flex items-center gap-4 font-medium">
-      <span className="text-[10px] uppercase tracking-wider text-muted-foreground leading-none">
+      <MindEaseText
+        variant="xs"
+        className="text-[10px] uppercase tracking-wider text-muted-foreground"
+      >
         {isBreak ? "Descanso" : "Tempo de foco"}
-      </span>
+      </MindEaseText>
       <div className="flex flex-col items-end">
-        <span className="text-sm font-bold tabular-nums">
+        <MindEaseText variant="sm" className="font-bold tabular-nums">
           {formatTime(seconds)}
-        </span>
+        </MindEaseText>
       </div>
 
       <div className="flex items-center">

@@ -1,3 +1,3 @@
 export * from "./Preferences";
-export * from "./Tarefa";
+export * from "./Task";
 export * from "./User";

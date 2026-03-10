@@ -1,3 +1,3 @@
 export * from "./IAuthRepository";
-export * from "./ITarefaRepository";
+export * from "./ITaskRepository";
 export * from "./IPreferences";

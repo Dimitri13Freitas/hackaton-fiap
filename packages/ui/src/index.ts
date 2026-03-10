@@ -34,6 +34,9 @@ export {
   Target,
   Sun,
   Zap,
+  MoreVertical,
+  Trash,
+  Pencil,
 } from "lucide-react";
 
 export { loginSchema, type LoginFormData } from "./validation/loginSchema";
