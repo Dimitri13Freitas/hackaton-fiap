@@ -25,7 +25,6 @@ export const createPreferencesStore = (
     persist(
       (set, get) => ({
         settings: null,
-
         hydrate: async (userId) => {
           if (!userId) return;
 
@@ -35,30 +34,31 @@ export const createPreferencesStore = (
             set({ settings });
           }
         },
-
         update: async (partial, userId) => {
           let current = get().settings;
 
-          if (!current) {
-            current = {
-              animations: true,
-              focusMode: false,
-              theme: "light",
-              highContrast: false,
-              pomodoro: { focusMinutes: 25, breakMinutes: 5 },
-              spacing: "medium",
-              fontSize: "medium",
-              version: 1,
-            };
-          }
+          const baseSettings = current || {
+            animations: true,
+            focusMode: false,
+            theme: "light",
+            highContrast: false,
+            pomodoro: { focusMinutes: 25, breakMinutes: 5 },
+            spacing: "medium",
+            fontSize: "medium",
+            version: 1,
+          };
 
           const updated: PreferencesSettings = {
-            ...current,
+            ...baseSettings,
             ...partial,
+            // A mágica acontece aqui: mesclamos o pomodoro separadamente
+            pomodoro: {
+              ...baseSettings.pomodoro,
+              ...(partial.pomodoro || {}),
+            },
           };
 
           set({ settings: updated });
-
           await saveSettingsUseCase.execute(userId, updated);
         },
       }),

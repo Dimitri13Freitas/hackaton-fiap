@@ -1,14 +1,20 @@
 import { useState, useEffect, useCallback } from "react";
-import { Play, Pause, RotateCcw } from "lucide-react";
-import { Button, cn, toast } from "@repo/ui";
-
-const FOCUS_TIME = 10; // 25 min
-const BREAK_TIME = 5; // 5 min
+import { Button, cn, toast, Play, Pause, RotateCcw } from "@repo/ui";
+import { usePreferencesStore } from "@repo/stores";
 
 export function PomodoroTimer() {
-  const [seconds, setSeconds] = useState(FOCUS_TIME);
+  const settings = usePreferencesStore((s) => s.settings?.pomodoro);
+  const focusMin = (settings?.focusMinutes ?? 10) * 60;
+  const breakMin = (settings?.breakMinutes ?? 5) * 60;
+  const [seconds, setSeconds] = useState(focusMin);
   const [isActive, setIsActive] = useState(false);
   const [isBreak, setIsBreak] = useState(false);
+
+  useEffect(() => {
+    if (!isActive) {
+      setSeconds(isBreak ? breakMin : focusMin);
+    }
+  }, [focusMin, breakMin, isBreak, isActive]);
 
   const formatTime = (totalSeconds: number) => {
     const mins = Math.floor(totalSeconds / 60);
@@ -21,28 +27,31 @@ export function PomodoroTimer() {
   const resetTimer = useCallback(() => {
     setIsActive(false);
     setIsBreak(false);
-    setSeconds(FOCUS_TIME);
-  }, []);
+    setSeconds(focusMin);
+  }, [focusMin]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
 
-    if (isActive && seconds > 0) {
+    if (isActive) {
       interval = setInterval(() => {
-        setSeconds((prev) => prev - 1);
-      }, 1000);
-    } else if (seconds === 0) {
-      const nextModeIsBreak = !isBreak;
-      setIsBreak(nextModeIsBreak);
-      setSeconds(nextModeIsBreak ? BREAK_TIME : FOCUS_TIME);
+        setSeconds((prev) => {
+          if (prev > 1) return prev - 1;
 
-      toast(nextModeIsBreak ? "Hora de descansar!" : "Hora de focar!");
+          const nextIsBreak = !isBreak;
+          setIsBreak(nextIsBreak);
+
+          toast(nextIsBreak ? "Hora de descansar!" : "Hora de focar!");
+
+          return nextIsBreak ? breakMin : focusMin;
+        });
+      }, 1000);
     }
 
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isActive, seconds, isBreak]);
+  }, [isActive, isBreak, focusMin, breakMin]);
 
   return (
     <div className="flex items-center gap-4 font-medium">

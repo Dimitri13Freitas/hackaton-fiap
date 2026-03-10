@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { Plus } from "lucide-react";
-import { Button, Separator } from "@repo/ui";
+import { Button, Separator, Plus } from "@repo/ui";
+import { TipsSlide } from "./tips-slide";
+import { usePreferencesStore } from "@repo/stores";
 
 const initialData = {
   tasks: {
@@ -17,12 +18,11 @@ const initialData = {
 };
 
 export default function KanbanBoard() {
+  const focusMode = usePreferencesStore((s) => s.settings?.focusMode);
   const [data, setData] = useState(initialData);
   const [newTaskContent, setNewTaskContent] = useState("");
-  // Agora isAdding armazena o ID da coluna (ex: 'col-1') ou null
   const [activeColumnId, setActiveColumnId] = useState(null);
 
-  // Função para adicionar nova tarefa em qualquer coluna
   const handleAddTask = (e, columnId) => {
     e.preventDefault();
     if (!newTaskContent.trim()) return;
@@ -33,7 +33,7 @@ export default function KanbanBoard() {
     const column = data.columns[columnId];
     const newColumn = {
       ...column,
-      taskIds: [newTaskId, ...column.taskIds], // Adiciona no topo da respectiva coluna
+      taskIds: [newTaskId, ...column.taskIds],
     };
 
     setData({
@@ -115,7 +115,6 @@ export default function KanbanBoard() {
                 </div>
                 <Separator />
 
-                {/* Formulário condicional baseado no activeColumnId */}
                 {activeColumnId === column.id && (
                   <form
                     onSubmit={(e) => handleAddTask(e, column.id)}
@@ -185,8 +184,9 @@ export default function KanbanBoard() {
           })}
         </div>
       </DragDropContext>
+      {!focusMode && <TipsSlide />}
 
-      <aside className="w-full lg:w-64 shrink-0">
+      {/* <aside className="w-full lg:w-64 shrink-0">
         <div className="rounded-xl border bg-card p-5 shadow-sm sticky top-0">
           <h3 className="mb-3 font-bold text-sm text-primary">
             Dicas de produtividade
@@ -202,7 +202,7 @@ export default function KanbanBoard() {
             </p>
           </div>
         </div>
-      </aside>
+      </aside> */}
     </div>
   );
 }

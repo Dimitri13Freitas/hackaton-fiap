@@ -68,7 +68,7 @@ export class AuthRepository implements IAuthRepository {
           },
 
           accessibilitySettings: {
-            animations: false,
+            animations: true,
             focusMode: false,
             theme: "light",
             highContrast: false,

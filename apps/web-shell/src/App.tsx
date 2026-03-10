@@ -1,10 +1,9 @@
 import { AppRoutes } from "./routes/app-routes";
 import { BrowserRouter } from "react-router-dom";
-import { Toaster, TooltipProvider } from "@repo/ui";
+import { Toaster, TooltipProvider, LoaderCircle } from "@repo/ui";
 import { useAuthStore } from "@repo/stores";
 import { authRepository } from "@repo/infra";
 import { useEffect } from "react";
-import { LoaderCircle } from "lucide-react";
 
 export const RemoteComponentWrapper = () => {
   const setUser = useAuthStore((s) => s.setUser);

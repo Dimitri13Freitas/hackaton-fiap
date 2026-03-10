@@ -2,8 +2,8 @@ export type ThemeMode = "light" | "dark";
 export type ScaleOption = "small" | "medium" | "large";
 
 export interface PomodoroSettings {
-  focusMinutes: number;
-  breakMinutes: number;
+  focusMinutes?: number;
+  breakMinutes?: number;
 }
 
 export interface PreferencesSettings {

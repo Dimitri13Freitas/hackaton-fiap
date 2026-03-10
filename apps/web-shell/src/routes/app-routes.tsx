@@ -2,7 +2,11 @@ import { useAuthStore } from "@repo/stores";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import { Home } from "../pages/home";
 import { lazy, useEffect } from "react";
-import { TooltipProvider, PreferencesProvider } from "@repo/ui";
+import {
+  TooltipProvider,
+  PreferencesProvider,
+  SidebarProvider,
+} from "@repo/ui";
 import { Interface } from "../pages/interface";
 import KanbanBoard from "../components/kanban-board";
 
@@ -21,18 +25,7 @@ export function AppRoutes() {
   return (
     <TooltipProvider>
       <Routes>
-        <Route
-          path="/"
-          element={
-            isAuthenticated ? (
-              <PreferencesProvider>
-                <Interface />
-              </PreferencesProvider>
-            ) : (
-              <Home />
-            )
-          }
-        >
+        <Route path="/" element={isAuthenticated ? <Interface /> : <Home />}>
           <Route index path="/" element={<KanbanBoard />} />
           <Route path="/settings" element={<RemoteMFESettings />} />
           <Route path="/profile" element={<div>Tela de Perfil</div>} />

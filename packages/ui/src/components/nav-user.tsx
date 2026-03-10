@@ -21,13 +21,24 @@ export function NavUser() {
   const { logout, user } = useAuthStore();
 
   const theme = usePreferencesStore((s) => s.settings?.theme);
+  const focusMode = usePreferencesStore((s) => s.settings?.focusMode);
   const update = usePreferencesStore((s) => s.update);
 
-  function toggle() {
+  function toggleTheme() {
     if (!user) return;
     update(
       {
         theme: theme === "dark" ? "light" : "dark",
+      },
+      user?.uid,
+    );
+  }
+
+  function toggleFocusMode() {
+    if (!user) return;
+    update(
+      {
+        focusMode: !focusMode,
       },
       user?.uid,
     );
@@ -66,17 +77,17 @@ export function NavUser() {
               <DropdownMenuGroup>
                 <DropdownMenuItem
                   className="cursor-pointer"
-                  onClick={() => toggle()}
+                  onClick={() => toggleTheme()}
                 >
                   <Moon />
                   {theme === "dark" ? "Tema claro" : "Tema escuro"}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="cursor-pointer"
-                  onClick={() => console.log("ativa modo foco")}
+                  onClick={() => toggleFocusMode()}
                 >
                   <Focus />
-                  Ativar modo foco
+                  {focusMode ? "Desativar modo foco" : "Ativar modo foco"}
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />

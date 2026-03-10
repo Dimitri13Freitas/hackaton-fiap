@@ -11,14 +11,30 @@ export * from "./components/ui/separator";
 export * from "./components/ui/breadcrumb";
 export * from "./components/ui/sidebar";
 export * from "./components/ui/tooltip";
+export * from "./components/ui/select";
 export * from "./components/ui/skeleton";
 export * from "./components/ui/sheet";
+export * from "./components/ui/switch";
 export * from "./components/ui/separator";
 export * from "./components/ui/dropdown-menu";
 export * from "./components/ui/collapsible";
 export * from "./preferences/PreferencesProvider";
 
-export { LoaderCircle } from "lucide-react";
+export {
+  LoaderCircle,
+  Eye,
+  Play,
+  Pause,
+  RotateCcw,
+  Plus,
+  Sparkles,
+  Clock,
+  Maximize,
+  Type,
+  Target,
+  Sun,
+  Zap,
+} from "lucide-react";
 
 export { loginSchema, type LoginFormData } from "./validation/loginSchema";
 export { Toaster, toast } from "sonner";

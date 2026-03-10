@@ -1,5 +1,11 @@
-import { Button, MindEaseLogo, MindEaseText } from "@repo/ui";
-import { Sparkles, Target, Zap } from "lucide-react";
+import {
+  Button,
+  MindEaseLogo,
+  MindEaseText,
+  Sparkles,
+  Target,
+  Zap,
+} from "@repo/ui";
 import { AssetHome } from "../../public/assethome";
 import { Link } from "react-router-dom";
 
@@ -35,15 +41,15 @@ export const Home = () => {
               Adapte tudo ao seu ritmo cognitivo.
             </MindEaseText>
             <div className="flex flex-wrap gap-4 pt-4 mt-6">
-              <div className="flex items-center gap-2 bg-white px-4 py-3 rounded-lg shadow-sm border border-border">
+              <div className="flex items-center gap-2 bg-card px-4 py-3 rounded-lg shadow-sm border border-border">
                 <Target className="w-5 h-5 text-red-500" />
                 <span className="text-sm font-medium">Modo Foco</span>
               </div>
-              <div className="flex items-center gap-2 bg-white px-4 py-3 rounded-lg shadow-sm border border-border">
+              <div className="flex items-center gap-2 bg-card px-4 py-3 rounded-lg shadow-sm border border-border">
                 <Zap className="w-5 h-5 text-yellow-400" />
                 <span className="text-sm font-medium">Alertas Cognitivos</span>
               </div>
-              <div className="flex items-center gap-2 bg-white px-4 py-3 rounded-lg shadow-sm border border-border">
+              <div className="flex items-center gap-2 bg-card px-4 py-3 rounded-lg shadow-sm border border-border">
                 <Sparkles className="w-5 h-5 text-blue-400" />
                 <span className="text-sm font-medium">
                   Resumos Inteligentes
