@@ -9,6 +9,7 @@ import {
 } from "@repo/ui";
 import { Interface } from "../pages/interface";
 import KanbanBoard from "../components/kanban-board";
+import { Profile } from "../pages/Profile";
 
 const RemoteMFELogin = lazy(() => import("mfe_login/Login"));
 const RemoteMFERegister = lazy(() => import("mfe_login/Register"));
@@ -28,7 +29,7 @@ export function AppRoutes() {
         <Route path="/" element={isAuthenticated ? <Interface /> : <Home />}>
           <Route index path="/" element={<KanbanBoard />} />
           <Route path="/settings" element={<RemoteMFESettings />} />
-          <Route path="/profile" element={<div>Tela de Perfil</div>} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
 
         <Route

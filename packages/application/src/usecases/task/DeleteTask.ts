@@ -3,14 +3,11 @@ import { type ITaskRepository } from "../../ports/ITaskRepository";
 
 export class DeleteTask {
   constructor(private repository: ITaskRepository) {}
-  async execute(userId: string, task: Task) {
+  async execute(userId: string, task: string) {
     if (!userId || userId.trim().length === 0) {
       throw new Error("User é obrigatório");
     }
 
-    if (!task || task.content.trim().length === 0) {
-      throw new Error("Task é aobrigado a ter algum conteúdo");
-    }
-    return this.repository.deleteTask(userId, task.id);
+    return this.repository.deleteTask(userId, task);
   }
 }

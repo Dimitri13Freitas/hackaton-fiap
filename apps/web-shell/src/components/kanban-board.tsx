@@ -22,140 +22,149 @@ import {
   getTasksUseCase,
   updateTaskUseCase,
 } from "@repo/infra";
+import { Task } from "@repo/domain";
 
-const initialData = {
-  tasks: {
-    "task-1": { id: "task-1", content: "Configurar repositório" },
-    "task-2": { id: "task-2", content: "Estilizar Sidebar" },
-  },
+const DEFAULT_DATA = {
+  tasks: {} as any,
   columns: {
-    "col-1": { id: "col-1", title: "a fazer", taskIds: ["task-1", "task-2"] },
+    "col-1": { id: "col-1", title: "a fazer", taskIds: [] },
     "col-2": { id: "col-2", title: "fazendo", taskIds: [] },
     "col-3": { id: "col-3", title: "concluídas", taskIds: [] },
-  },
+  } as any,
   columnOrder: ["col-1", "col-2", "col-3"],
 };
 
 export default function KanbanBoard() {
   const focusMode = usePreferencesStore((s) => s.settings?.focusMode);
   const { user } = useAuthStore();
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState<any>(DEFAULT_DATA);
   const [newTaskContent, setNewTaskContent] = useState("");
-  const [activeColumnId, setActiveColumnId] = useState(null);
-  const [editingTaskId, setEditingTaskId] = useState(null);
+  const [activeColumnId, setActiveColumnId] = useState<string | null>(null);
+  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
   const [editingText, setEditingText] = useState("");
-  const [tasks, setTasks] = useState<any>([]);
+  const [tasks, setTasks] = useState<any[]>([]);
 
   useEffect(() => {
     async function loadTasks() {
-      if (!user?.uid) return null;
-      const result = await getTasksUseCase.execute(user?.uid);
-      console.log(result);
+      if (!user?.uid) return;
+      const result = await getTasksUseCase.execute(user.uid);
       setTasks(result);
+
+      const newTasks: any = {};
+      const newColumns: any = JSON.parse(JSON.stringify(DEFAULT_DATA.columns));
+
+      const sortedResult = Array.isArray(result)
+        ? [...result].sort((a, b) => a.createAt - b.createAt)
+        : [];
+
+      sortedResult.forEach((task: any) => {
+        newTasks[task.id] = task;
+        if (newColumns[task.columnId]) {
+          newColumns[task.columnId].taskIds.push(task.id);
+        } else {
+          newColumns["col-1"].taskIds.push(task.id);
+        }
+      });
+
+      setData({
+        tasks: newTasks,
+        columns: newColumns,
+        columnOrder: DEFAULT_DATA.columnOrder,
+      });
     }
 
     loadTasks();
-  }, []);
+  }, [user?.uid]);
 
-  // const handleAddTask = (e: any, columnId: any) => {
-  //   e.preventDefault();
-  //   if (!newTaskContent.trim()) return;
-
-  //   const newTaskId = `task-${Date.now()}`;
-  //   const newTask = { id: newTaskId, content: newTaskContent };
-
-  //   const column = data.columns[columnId];
-  //   const newColumn = {
-  //     ...column,
-  //     taskIds: [newTaskId, ...column.taskIds],
-  //   };
-
-  //   setData({
-  //     ...data,
-  //     tasks: { ...data.tasks, [newTaskId]: newTask },
-  //     columns: { ...data.columns, [columnId]: newColumn },
-  //   });
-
-  //   setNewTaskContent("");
-  //   setActiveColumnId(null);
-  // };
-
-  const handleAddTask = async (e, columnId) => {
+  const handleAddTask = async (e: any, columnId: string) => {
     e.preventDefault();
-    if (!user?.uid) return null;
+    if (!user?.uid || !newTaskContent.trim()) return;
 
-    // const task = new Task(
-    //   crypto.randomUUID(),
-    //   newTaskContent,
-    //   columnId,
-    //   Date.now(),
-    // );
+    const task = new Task(
+      crypto.randomUUID(),
+      newTaskContent,
+      columnId,
+      Date.now(),
+    );
 
-    await createTaskUseCase.execute(user?.uid, task);
-
+    setData((prev: any) => {
+      const column = prev.columns[columnId];
+      return {
+        ...prev,
+        tasks: { ...prev.tasks, [task.id]: task },
+        columns: {
+          ...prev.columns,
+          [columnId]: { ...column, taskIds: [...column.taskIds, task.id] },
+        },
+      };
+    });
+    setTasks((prev: any) => [...prev, task]);
     setNewTaskContent("");
+    setActiveColumnId(null);
+
+    await createTaskUseCase.execute(user.uid, task);
   };
 
-  // const deleteTask = (taskId, columnId) => {
-  //   const column = data.columns[columnId];
+  const handleDeleteTask = async (taskId: string, columnId: string) => {
+    if (!user?.uid) return;
 
-  //   const newTaskIds = column.taskIds.filter((id) => id !== taskId);
-
-  //   const newColumn = {
-  //     ...column,
-  //     taskIds: newTaskIds,
-  //   };
-
-  //   const newTasks = { ...data.tasks };
-  //   delete newTasks[taskId];
-
-  //   setData({
-  //     ...data,
-  //     tasks: newTasks,
-  //     columns: {
-  //       ...data.columns,
-  //       [columnId]: newColumn,
-  //     },
-  //   });
-  // };
-
-  // const editTask = (taskId, newContent) => {
-  //   setData({
-  //     ...data,
-  //     tasks: {
-  //       ...data.tasks,
-  //       [taskId]: {
-  //         ...data.tasks[taskId],
-  //         content: newContent,
-  //       },
-  //     },
-  //   });
-  // };
-
-  const handleDeleteTask = async (taskId) => {
-    if (!user?.uid) return null;
+    setData((prev: any) => {
+      const column = prev.columns[columnId];
+      return {
+        ...prev,
+        columns: {
+          ...prev.columns,
+          [columnId]: {
+            ...column,
+            taskIds: column.taskIds.filter((id: string) => id !== taskId),
+          },
+        },
+        tasks: Object.fromEntries(
+          Object.entries(prev.tasks).filter(([id]) => id !== taskId),
+        ),
+      };
+    });
+    setTasks((prev: any) => prev.filter((t: any) => t.id !== taskId));
 
     await deleteTaskUseCase.execute(user.uid, taskId);
   };
 
-  const editTask = async (taskId, newContent) => {
-    if (!user?.uid) return null;
+  const handleEditTask = async (taskId: string) => {
+    if (!user?.uid || !editingText.trim()) {
+      setEditingTaskId(null);
+      return;
+    }
 
     const task = tasks.find((t) => t.id === taskId);
+    if (!task) return;
 
-    // const updated = new Task(
-    //   task.id,
-    //   newContent,
-    //   task.columnId,
-    //   task.createdAt
-    // );
+    const updatedTask = new Task(
+      task.id,
+      editingText,
+      task.columnId,
+      task.createAt,
+    );
 
-    await updateTaskUseCase.execute(user?.uid, updated);
+    setData((prev: any) => ({
+      ...prev,
+      tasks: {
+        ...prev.tasks,
+        [taskId]: { ...prev.tasks[taskId], content: editingText },
+      },
+    }));
+    setTasks((prev: any) =>
+      prev.map((t: any) => (t.id === taskId ? updatedTask : t)),
+    );
+    setEditingTaskId(null);
+
+    console.log(updatedTask);
+
+    await updateTaskUseCase.execute(user.uid, updatedTask);
   };
 
-  const onDragEnd = (result) => {
+  const onDragEnd = async (result: any) => {
     const { destination, source, draggableId } = result;
-    if (!destination) return;
+    if (!destination || !user?.uid) return;
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
@@ -187,22 +196,38 @@ export default function KanbanBoard() {
         [finish.id]: { ...finish, taskIds: finishIds },
       },
     });
+
+    const task = tasks.find((t: any) => t.id === draggableId);
+    if (task) {
+      const updatedTask = new Task(
+        task.id,
+        task.content,
+        destination.droppableId,
+        task.createAt,
+      );
+      setTasks((prev: any) =>
+        prev.map((t: any) => (t.id === task.id ? updatedTask : t)),
+      );
+      await updateTaskUseCase.execute(user.uid, updatedTask);
+    }
   };
 
   return (
     <div className="flex flex-1 gap-6 flex-col lg:flex-row h-full p-4">
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="flex flex-1 gap-4 overflow-x-auto">
-          {data.columnOrder.map((columnId) => {
+          {data.columnOrder.map((columnId: string) => {
             const column = data.columns[columnId];
-            const tasks = column.taskIds.map((id) => data.tasks[id]);
+            const columnTasks = column.taskIds
+              .map((id: string) => data.tasks[id])
+              .filter(Boolean);
 
             return (
               <div
                 key={column.id}
-                className="flex flex-1 min-w-[280px] flex-col  rounded-xl border  bg-muted/20 p-4"
+                className="flex flex-1 min-w-[280px] flex-col rounded-xl border bg-muted/20 p-4"
               >
-                <div className="flex items-center justify-between mb-2 ">
+                <div className="flex items-center justify-between mb-2">
                   <MindEaseText
                     variant="sm"
                     className="font-bold uppercase tracking-tight"
@@ -267,7 +292,7 @@ export default function KanbanBoard() {
                           : ""
                       }`}
                     >
-                      {tasks.map((task, index) => (
+                      {columnTasks.map((task: any, index: number) => (
                         <Draggable
                           key={task.id}
                           draggableId={task.id}
@@ -291,14 +316,10 @@ export default function KanbanBoard() {
                                     onChange={(e) =>
                                       setEditingText(e.target.value)
                                     }
-                                    onBlur={() => {
-                                      editTask(task.id, editingText);
-                                      setEditingTaskId(null);
-                                    }}
+                                    onBlur={() => handleEditTask(task.id)}
                                     onKeyDown={(e) => {
                                       if (e.key === "Enter") {
-                                        editTask(task.id, editingText);
-                                        setEditingTaskId(null);
+                                        handleEditTask(task.id);
                                       }
                                     }}
                                   />
@@ -332,7 +353,7 @@ export default function KanbanBoard() {
                                     <DropdownMenuItem
                                       className="text-red-500"
                                       onClick={() =>
-                                        deleteTask(task.id, column.id)
+                                        handleDeleteTask(task.id, column.id)
                                       }
                                     >
                                       <Trash size={14} className="mr-2" />

@@ -146,6 +146,9 @@ importers:
       '@hello-pangea/dnd':
         specifier: ^18.0.1
         version: 18.0.1(@types/react@19.2.13)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@repo/domain':
+        specifier: workspace:*
+        version: link:../../packages/domain
       '@repo/infra':
         specifier: workspace:*
         version: link:../../packages/infra
