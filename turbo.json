@@ -9,6 +9,10 @@
       "outputs": []
     },
     "dev": { "cache": false, "persistent": true },
-    "serve": { "cache": false, "persistent": true }
+    "serve": { "cache": false, "persistent": true },
+    "storybook": {
+      "cache": false,
+      "persistent": true
+    }
   }
 }

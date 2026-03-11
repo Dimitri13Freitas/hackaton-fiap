@@ -12,5 +12,5 @@
     },
     "skipLibCheck": true,
   },
-  "include": ["src"]
+  "include": ["src/**/*", ".storybook/**/*", "global.d.ts"]
 }

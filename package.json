@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev serve --filter=mfe-login --filter=mfe-settings --filter=web-shell --parallel",
+    "dev": "turbo run dev storybook serve --filter=mfe-login --filter=mfe-settings --filter=web-shell --filter=@repo/ui --parallel",
     "lint": "turbo run lint"
   },
   "keywords": [],

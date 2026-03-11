@@ -2,3 +2,6 @@ node_modules
 .turbo
 .expo
 pnpm-lock.yaml
+
+*storybook.log
+storybook-static

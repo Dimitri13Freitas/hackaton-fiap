@@ -1,5 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  content: [
+    "./src/**/*.{ts,tsx}",
+    "./.storybook/**/*.{ts,tsx}",
+    "./stories/**/*.{ts,tsx}",
+  ],
   theme: {
     extend: {
       colors: {
@@ -12,7 +17,6 @@ module.exports = {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
         },
-        // ... adicione as outras cores do shadcn aqui
       },
       borderRadius: {
         lg: "var(--radius)",
