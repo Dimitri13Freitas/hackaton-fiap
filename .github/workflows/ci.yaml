@@ -3,7 +3,6 @@ name: CI
 on:
   push:
     branches: [main, develop]
-
   pull_request:
     branches: [main, develop]
 
@@ -25,14 +24,27 @@ jobs:
         with:
           version: 10.29.3
 
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Lint
         run: pnpm turbo run lint
 
-      - name: Build packages
+      - name: Build
         run: pnpm turbo run build
 
       - name: Build Storybook
-        run: pnpm --filter ./packages/ui build-storybook
+        run: pnpm turbo run build-storybook --filter=@repo/ui
