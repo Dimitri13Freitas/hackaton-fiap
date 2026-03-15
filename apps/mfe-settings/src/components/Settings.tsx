@@ -18,6 +18,8 @@ import {
 } from "@repo/ui";
 import { useAuthStore, usePreferencesStore } from "@repo/stores";
 
+type ScaleOption = "small" | "medium" | "large";
+
 const SettingCard = ({
   icon,
   title,
@@ -171,7 +173,7 @@ const Settings = () => {
             >
               <Select
                 defaultValue={spacing}
-                onValueChange={(v: any) => {
+                onValueChange={(v: ScaleOption) => {
                   if (user?.uid) update({ spacing: v }, user?.uid);
                 }}
               >
@@ -197,7 +199,7 @@ const Settings = () => {
             >
               <Select
                 defaultValue={fontSize}
-                onValueChange={(v: any) => {
+                onValueChange={(v: ScaleOption) => {
                   if (user?.uid) update({ fontSize: v }, user?.uid);
                 }}
               >
