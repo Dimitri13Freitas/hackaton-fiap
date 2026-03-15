@@ -13,8 +13,8 @@ export default defineConfig({
         "./Settings": "./src/components/Settings",
       },
       shared: {
-        react: { singleton: true, requiredVersion: false },
-        "react-dom": { singleton: true, requiredVersion: false },
+        react: { singleton: true, requiredVersion: "^19.2.0" },
+        "react-dom": { singleton: true, requiredVersion: "^19.2.0" },
         "@repo/ui": { singleton: true, eager: true },
         "@repo/stores": {
           singleton: true,
