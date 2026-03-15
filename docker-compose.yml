@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: hackaton_fiap_app
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+      - "5002:5002"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./apps:/app/apps
+      - ./packages:/app/packages
+      # Ignore node_modules overrides from host to avoid Alpine/Windows conflicts
+      - /app/node_modules
+      - /app/apps/web-shell/node_modules
+      - /app/apps/mfe-login/node_modules
+      - /app/apps/mfe-settings/node_modules
+      - /app/packages/ui/node_modules
+      - /app/packages/stores/node_modules
+      - /app/packages/domain/node_modules
+      - /app/packages/application/node_modules
+      - /app/packages/infra/node_modules
+    command: pnpm dev

@@ -11,7 +11,6 @@ Estas instruções vão te ajudar a rodar o projeto localmente e explorar as fun
 ### Funcionalidades do Projeto
 - Estrutura de Microfrontends (Web Shell + MFEs).
 - Autenticação via Firebase.
-- Aplicação Mobile integrada.
 - Design System compartilhado.
 - Gestão de estado em camadas (Domain, Application, Infra, Stores).
 
@@ -22,13 +21,12 @@ Estas instruções vão te ajudar a rodar o projeto localmente e explorar as fun
 > [!IMPORTANT]
 > É **extremamente necessário** que cada subprojeto dentro da pasta `apps/` possua o seu próprio arquivo `.env`.
 > 
-> Como cada aplicação (mfe-login, mfe-settings, web-shell, mobile) roda de forma independente, elas precisam carregar as variáveis de ambiente (como credenciais do Firebase e URLs de API) localmente.
+> Como cada aplicação (mfe-login, mfe-settings, web-shell) roda de forma independente, elas precisam carregar as variáveis de ambiente (como credenciais do Firebase e URLs de API) localmente.
 > 
 > Certifique-se de que o arquivo `.env` esteja presente em:
 > - `apps/web-shell/.env`
 > - `apps/mfe-login/.env`
 > - `apps/mfe-settings/.env`
-> - `apps/mobile/.env`
 
 ---
 
@@ -69,20 +67,6 @@ Para compilar todos os projetos do monorepo:
 pnpm build
 ```
 
-### Rodar o projeto via Docker
-O projeto já está configurado para rodar através do Docker. Para inicializar, certifique-se de que os arquivos `.env` das aplicações estão criados conforme a seção de [Configuração Importante](#-configuração-importante-env). 
-
-Em seguida, execute:
-```bash
-docker-compose up --build
-```
-Os microfrontends estarão disponíveis nas seguintes portas do seu localhost:
-- **web-shell:** `http://localhost:5000`
-- **mfe-login:** port `5001`
-- **mfe-settings:** port `5002`
-
----
-
 ## 🏗️ Arquitetura do Monorepo
 
 O projeto segue a estrutura padrão do Turborepo:
@@ -91,7 +75,6 @@ O projeto segue a estrutura padrão do Turborepo:
 - **web-shell**: Host principal que orquestra os microfrontends.
 - **mfe-login**: Microfrontend de autenticação.
 - **mfe-settings**: Microfrontend de configurações de perfil.
-- **mobile**: Aplicativo mobile (Expo/React Native).
 
 ### Pacotes Compartilhados (`packages/`)
 - **ui**: Componentes visuais e Design System.
