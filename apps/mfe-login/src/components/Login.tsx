@@ -34,6 +34,7 @@ const Login: React.FC = () => {
     if (isLoading) return null;
     try {
       await login(data);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error.message);
     }
