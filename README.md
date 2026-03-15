@@ -69,6 +69,18 @@ Para compilar todos os projetos do monorepo:
 pnpm build
 ```
 
+### Rodar o projeto via Docker
+O projeto já está configurado para rodar através do Docker. Para inicializar, certifique-se de que os arquivos `.env` das aplicações estão criados conforme a seção de [Configuração Importante](#-configuração-importante-env). 
+
+Em seguida, execute:
+```bash
+docker-compose up --build
+```
+Os microfrontends estarão disponíveis nas seguintes portas do seu localhost:
+- **web-shell:** `http://localhost:5000`
+- **mfe-login:** port `5001`
+- **mfe-settings:** port `5002`
+
 ---
 
 ## 🏗️ Arquitetura do Monorepo

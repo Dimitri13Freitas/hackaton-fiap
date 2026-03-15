@@ -1,0 +1,15 @@
+services:
+  hackaton-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hackaton-app
+    ports:
+      - "5000:5000" # web-shell
+      - "5001:5001" # mfe-login preview
+      - "5002:5002" # mfe-settings preview
+    environment:
+      - NODE_ENV=development
+    # Se desejar carregar variáveis de ambiente no root:
+    # env_file:
+    #   - .env

@@ -2,14 +2,10 @@ import { useAuthStore } from "@repo/stores";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import { Home } from "../pages/home";
 import { lazy, useEffect } from "react";
-import {
-  TooltipProvider,
-  PreferencesProvider,
-  SidebarProvider,
-} from "@repo/ui";
+import { TooltipProvider } from "@repo/ui";
 import { Interface } from "../pages/interface";
 import KanbanBoard from "../components/kanban-board";
-import { Profile } from "../pages/Profile";
+import { Profile } from "../pages/profile";
 
 const RemoteMFELogin = lazy(() => import("mfe_login/Login"));
 const RemoteMFERegister = lazy(() => import("mfe_login/Register"));
