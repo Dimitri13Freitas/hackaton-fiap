@@ -16,21 +16,19 @@ export default defineConfig({
       shared: {
         react: { singleton: true, requiredVersion: false },
         "react-dom": { singleton: true, requiredVersion: false },
-        "@repo/ui": { singleton: true, eager: true },
+        "@repo/ui": { singleton: true, eager: true, version: "0.0.1" },
         "@repo/stores": {
           singleton: true,
           eager: true,
+          version: "0.0.1",
         },
       },
     }),
   ],
   resolve: {
+    preserveSymlinks: true,
+    dedupe: ["react", "react-dom"],
     alias: {
-      react: path.resolve(__dirname, "./node_modules/react"),
-      "react/jsx-runtime": path.resolve(
-        __dirname,
-        "./node_modules/react/jsx-runtime",
-      ),
       "@": path.resolve(__dirname, "./src"),
     },
   },
@@ -40,9 +38,17 @@ export default defineConfig({
     minify: false,
     cssCodeSplit: false,
   },
+  optimizeDeps: {
+    include: ["@repo/ui"],
+  },
   preview: {
     port: 5001,
     strictPort: true,
     cors: true,
+  },
+  server: {
+    host: true,
+    port: 5001,
+    strictPort: true,
   },
 });

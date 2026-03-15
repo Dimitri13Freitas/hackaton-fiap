@@ -18,33 +18,38 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: pnpm
+
+      - name: Enable corepack
+        run: corepack enable
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10.29.3
 
-      - name: Get pnpm store directory
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - name: Setup pnpm cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Cache Turbo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
       - name: Lint
         run: pnpm turbo run lint
+
+      - name: Typecheck
+        run: pnpm turbo run typecheck
 
       - name: Build
         run: pnpm turbo run build
 
       - name: Build Storybook
         run: pnpm turbo run build-storybook --filter=@repo/ui
+
+      - name: Build Docker image
+        run: docker build -t hackaton-fiap .

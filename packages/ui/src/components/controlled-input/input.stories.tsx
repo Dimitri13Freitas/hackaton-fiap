@@ -37,7 +37,7 @@ const FormWrapper = (args: any) => {
 
   return (
     <FormProvider {...methods}>
-      <form className="w-[300px] bg-red-500 space-y-4">
+      <form className="w-[300px] space-y-4">
         <MindEaseControlledInput {...args} />
       </form>
     </FormProvider>

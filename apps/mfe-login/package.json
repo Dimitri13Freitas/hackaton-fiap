@@ -4,16 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite build --watch",
-    "serve": "vite preview --port 5001 --strictPort",
-    "lint": "eslint ."
+    "dev": "pnpm exec vite build --watch",
+    "serve": "pnpm exec vite preview --port 5001 --strictPort"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@repo/ui": "workspace:*",
     "@repo/stores": "workspace:*",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
     "react-hook-form": "^7.71.2"
   },
   "devDependencies": {

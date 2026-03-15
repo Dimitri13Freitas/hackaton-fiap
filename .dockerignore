@@ -1,0 +1,9 @@
+node_modules
+**/node_modules
+.pnpm-store
+.git
+.gitignore
+dist
+build
+.expo
+.turbo

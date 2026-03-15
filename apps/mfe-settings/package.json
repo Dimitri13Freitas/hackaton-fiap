@@ -4,13 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite build --watch",
-    "serve": "vite preview --port 5002 --strictPort",
-    "lint": "eslint ."
+    "dev": "pnpm exec vite build --watch",
+    "serve": "pnpm exec vite preview --port 5002 --strictPort"
   },
   "dependencies": {
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
     "@repo/stores": "workspace:*",
     "@repo/ui": "workspace:*"
   },
